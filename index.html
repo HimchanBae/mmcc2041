@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project KAPITAL</title>
+    <meta charset="utf-8" />
+    <link href="styles.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hahmlet&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      type="text/css"
+      href="jquery.booklet.latest.css"
+      rel="stylesheet"
+      media="screen, projection, tv"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="jquery.easing.1.3.js"></script>
+    <script src="jquery.booklet.latest.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#mybook").booklet({
+          manual: false,
+          overlays: true,
+          hovers: true,
+          pageNumbers: false,
+          closed: true,
+          width: "100%",
+          height: "100%",
+        });
+
+        $("#start-button").click(function () {
+          $("#home-page").hide();
+          $("#pageBar").css("display", "flex");
+          $("#navBar").css("display", "flex");
+          $("#mybook").show();
+        });
+
+        $("#prev-button").click(function () {
+          $("#mybook").booklet("prev");
+        });
+
+        $("#next-button").click(function () {
+          $("#mybook").booklet("next");
+        });
+
+        $("#navBar a").click(function (e) {
+          e.preventDefault();
+          $("#navBar a").removeClass("selected");
+          $(this).addClass("selected");
+        });
+
+        $("#navBar .chapter").click(function () {
+          var page = $(this).data("page");
+          $("#mybook").booklet("gotopage", page);
+        });
+
+        $(".home-button").click(function (e) {
+          $("#mybook").hide();
+          $("#pageBar").hide();
+          $("#navBar").hide();
+          $("#home-page").show();
+        });
+
+        $(".icon").hover(
+          function () {
+            var target = $(this).data("target");
+            $(".stack-img").css("z-index", "0");
+            $(target).css("z-index", "1");
+          },
+          function () {
+            var target = $(this).data("target");
+            $(target).css("z-index", "0");
+          }
+        );
+
+        let currentIndex = 0;
+        const images = $(".carousel-image");
+
+        images.hide().first().show();
+
+        setInterval(function () {
+          images.eq(currentIndex).fadeOut(1000);
+          currentIndex = (currentIndex + 1) % images.length;
+          images.eq(currentIndex).fadeIn(1000);
+        }, 2500);
+
+        var text =
+          '"청바지는 미국에서 시작되었지만, 아버지는 코지마에서 미국 청바지의 복각을 완벽하게 마스터했다. 나는 이미 완성된 것을 반복하는 것이 아니라 새로운 것을 창조해야 할 차례라고 생각했다. 나는 앞으로 100년 동안 새로운 것을 만들고 싶다."';
+        var i = 0;
+
+        function typeWriter() {
+          if (i < text.length) {
+            document.getElementById("reference").innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 75);
+          }
+        }
+
+        var observer = new IntersectionObserver(
+          function (entries) {
+            if (entries[0].isIntersecting) {
+              setTimeout(typeWriter, 1000);
+            }
+          },
+          { threshold: 0.1 }
+        );
+
+        var target = document.querySelector(".story-chapter11");
+        observer.observe(target);
+
+        var idx = 0;
+        var images2 = $("#slider img");
+        images2.hide().first().show();
+
+        $("#left").click(function () {
+          images2.eq(idx).hide();
+          idx = idx - 1 < 0 ? images2.length - 1 : idx - 1;
+          images2.eq(idx).show();
+        });
+
+        $("#right").click(function () {
+          images2.eq(idx).hide();
+          idx = (idx + 1) % images2.length;
+          images2.eq(idx).show();
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="home-page">
+      <video autoplay muted loop id="bg-video">
+        <source src="videos/home_bg.mp4" type="video/mp4" />
+      </video>
+      <div class="content">
+        <h1>WELCOME!</h1>
+        <p>
+          해당 웹페이지는 사용자 경험을 극대화하기 위하여 잡지책을 읽는 것과
+          같은 방식으로 작동합니다.
+        </p>
+        <p>1. 화면 양옆의 화살표 버튼을 클릭시 페이지를 넘길 수 있습니다.</p>
+        <p>
+          2. 또는 키보드의 좌 우 방향키를 사용하여 페이지를 넘길 수 있습니다.
+        </p>
+        <p>3. 화면 상단의 네비게이션 바로 빠르게 챕터를 이동 할 수 있습니다.</p>
+        <p>시작하려면 아래의 지문 인식 버튼을 눌러주세요.</p>
+        <button id="start-button">
+          <span class="material-symbols-outlined"> fingerprint </span>
+        </button>
+      </div>
+    </div>
+
+    <nav id="navBar">
+      <a href="#" class="home-button" data-page="0">Home</a>
+      <a href="#" class="chapter" data-page="2">Intro</a>
+      <a href="#" class="chapter" data-page="6">Story</a>
+      <a href="#" class="chapter" data-page="12">Identity</a>
+      <a href="#" class="chapter" data-page="22">Effect</a>
+    </nav>
+
+    <nav id="pageBar">
+      <button id="prev-button"></button>
+      <button id="next-button"></button>
+    </nav>
+
+    <div id="mybook">
+      <div class="cover"></div>
+
+      <div class="intro-chapter1" data-page="1">
+        <figure>
+          <img src="Images/longLogo.png" />
+        </figure>
+        <iframe
+          title="vimeo-player"
+          src="https://player.vimeo.com/video/318150198?h=f1e9b48072&autoplay=1&loop=1&muted=1&controls=0"
+          width="640"
+          height="360"
+          frameborder="0"
+          allow="autoplay"
+          allowfullscreen
+        ></iframe>
+        <figure>
+          <img class="reverse" src="Images/longLogo.png" />
+        </figure>
+      </div>
+
+      <div class="intro-chapter2" data-page="2">
+        <p class="heading">
+          Chapter1. <br />
+          문화와 패션의 이해
+        </p>
+        <hr />
+        <br />
+        <p>
+          문화와 패션, 서로가 서로에게 미치는 영향은 과연 어떤 모습일까요?
+          클래식 복식과 역사를 탐구하고 재해석하면서, 옛 것을 세련되게 소화할
+          때, 우리가 열망할 수 있는 강렬한 인상을 남기게 됩니다.
+        </p>
+        <br />
+        <figure>
+          <img src="Images/chapter2.png" />
+        </figure>
+        <br />
+        <p>"그것이 패션 아이템이든, 스타일링이든."</p>
+        <br /><br />
+        <p>
+          지금 소개할 <span class="indigo">KAPITAL</span>은 한 순간도 옛 것을
+          소홀히 여기지 않았습니다.
+        </p>
+      </div>
+
+      <div class="intro-chapter3" data-page="3">
+        <div class="image-icon-container">
+          <figure class="image-stack">
+            <img id="amekaji-1" class="stack-img" src="Images/amekaji_2.png" />
+            <figcaption>©thesignetstore.com</figcaption>
+            <img id="amekaji-2" class="stack-img" src="Images/amekaji_1.png" />
+            <figcaption>©thesignetstore.com</figcaption>
+            <img id="amekaji-3" class="stack-img" src="Images/amekaji_3.png" />
+            <figcaption>©thesignetstore.com</figcaption>
+          </figure>
+          <div class="icon-group">
+            <div class="icon" data-target="#amekaji-1">A</div>
+            <div class="icon" data-target="#amekaji-2">B</div>
+            <div class="icon" data-target="#amekaji-3">C</div>
+          </div>
+        </div>
+        <hr />
+        <p class="heading"><strong>“문화가 패션을 발전시키다”</strong></p>
+        <hr />
+        <p>이것이 KAPITAL의 핵심 철학입니다.</p>
+      </div>
+
+      <div class="intro-chapter4" data-page="4">
+        <p class="heading">
+          KAPITAL을 이해하려면, <br /><span class="indigo">아메카지</span>에
+          대한 이해가 필요합니다.
+        </p>
+        <hr />
+        <br />
+        <p>
+          2차 세계대전 이후 미국과 우호적인 관계를 쌓으면서 국가가 발전하게 되자
+          일본은 미국 문화의 영향을 강하게 받게 되었고, 당연히 패션에도 그
+          영향이 미치게 되었습니다.
+        </p>
+        <br /><br />
+        <p>
+          그 결과, 미국의 세미 포멀 복장을 일본만의 스타일로 재정립하는 시도가
+          이어졌는데 그것이 아메카지의 기원이 되었습니다.
+        </p>
+        <br />
+        <figure>
+          <img src="Images/amekaji.png" />
+          <!-- <figcaption>©kapital.jp</figcaption> -->
+        </figure>
+        <br />
+        <p>
+          정리하자면, 아메카지는 2차 세계대전 이후 일본이 미국 문화의 영향을
+          강하게 받게 되면서 등장한 패션 트렌드로, 미국의 세미 포멀 복장을
+          일본만의 스타일로 재해석한 것입니다.
+        </p>
+      </div>
+
+      <div class="intro-chapter5" data-page="5">
+        <figure>
+          <img src="Images/show.png" />
+          <!-- <figcaption>©kapital.jp</figcaption> -->
+          <img src="Images/show-2.png" />
+          <!-- <figcaption>©kapital.jp</figcaption> -->
+        </figure>
+        <hr />
+        <p>
+          KAPITAL은 오래전에 존재했던 복식과 전통을 고수하면서도, 가장
+          현대적이고 예술적인 옷을 만드는 능력을 가진 브랜드입니다. 철학과
+          전통을 고수하면서도 트렌드와 별개의 옷을 만들어가는 그들은,
+          아이러니하게도 현재 '하이프'한 사람들이 열망하는 브랜드 중 하나입니다.
+        </p>
+        <p>
+          변하지 않는 초심과 장인 정신으로, 이익보다는 진정성에 몰두한 KAPITAL은
+          이제 트렌드의 중심에 서 있습니다. 그들의 이야기를 통해, 문화가 패션을
+          어떻게 발전시키고, 그 패션이 다시 어떻게 문화에 영향을 미치는지
+          살펴보며, KAPITAL의 패션 세계에 함께 빠져보시기를 바랍니다.
+        </p>
+      </div>
+
+      <div class="story-chapter6" data-page="6">
+        <span class="heading">Chatper2.<br />아버지와 아들의 KAPITAL</span>
+        <hr />
+        <figure>
+          <img src="Images/storyMain2.png" />
+          <!-- <figcaption>©sabukaru.com</figcaption> -->
+        </figure>
+      </div>
+
+      <div class="story-chapter7" data-page="7">
+        <br />
+        <figure>
+          <img src="Images/toshikiyo.png" />
+          <!-- <figcaption>©sabukaru.com</figcaption> -->
+        </figure>
+        <p>
+          KAPITAL의 설립자는 일본 태생의 토시키요 히라타(Toshikiyo
+          Hirata)입니다.
+        </p>
+        <p>
+          당시 미국은 고개만 돌리면 접할 수 있었던 것이 Levi’s나 Lee 등의 빈티지
+          데님이었고, 토시키요 역시 빈티지 데님을 접하게 되는 일은 당연한
+          일이었습니다.
+        </p>
+        <p>
+          토시키요는 저마다 다른 세월의 풍파를 겪고도 견고하게 버텨낸 데님에
+          매료되어 마치 자신이 데님을 만들어야 하는 운명처럼 무작정 일본 데님의
+          수도이자, 아내의 고향인 코지마(Kojima)로 이사하여 본격적으로 청바지를
+          만드는 일을 하며 데님에 대한 연구를 시작하게 됩니다.
+        </p>
+      </div>
+
+      <div class="story-chapter8" data-page="8">
+        <p>
+          오카야마현에 위치한 코지마 지구는 1600년대부터 일본의 섬유산업이
+          활발하던 지역이며, 1960년대에 직접 데님을 생산하기 시작한 일본 최초의
+          데님 발상지입니다. <br />
+          그만큼 높은 기술력과 스스로 일궈낸 역사에 대한 자부심으로 오리지널보다
+          더 오리지널 같은 데님을 생산하는 코지마는 데님의 성지로 인정받고
+          있습니다.
+        </p>
+        <hr />
+        <div id="carousel-container">
+          <div id="carousel">
+            <figure class="carousel-image">
+              <img src="Images/jean1.png" />
+            </figure>
+            <figure class="carousel-image">
+              <img src="Images/jeans.png" />
+            </figure>
+            <figure class="carousel-image">
+              <img src="Images/jean2.png" />
+            </figure>
+          </div>
+        </div>
+        <hr />
+        <p>
+          토시키요가 코지마에서 콧대 높은 코지마의 데님 장인들 밑에서 일을
+          배웠을 당시 그들을 뛰어넘는다는 것은 상상도 못할 일이었습니다. 하지만
+          훗날, 그가 만든 KAPITAL이 코지마의 왕좌를 차지한 것은 마치 필연적으로
+          보일 만큼 토시키요의 데님에 대한 장인 정신은 남달랐습니다.
+        </p>
+      </div>
+
+      <div class="story-chapter9" data-page="9">
+        <span class="heading">데님의 수도 '코지마'를 대표하다</span>
+        <hr />
+        <figure>
+          <img src="Images/tohikiyo_kojima.png" />
+        </figure>
+        <p>
+          토시키요는 1975년부터 데님 봉제 공장에서 여러 노하우를 쌓으며 9년간의
+          연구 끝에 1984년에 ‘Capital Ltd’라는 데님 생산 공장과 빈티지 샵을
+          시작하게 됩니다. 1996년에는 자신의 이름을 딴 ‘TH’라는 오리지널 데님
+          라인을 출시까지 하며 브랜드에 열중하던 사이, 코지마에서 그의 아들 키로
+          히라타(Kiro Hirata)가 태어납니다.
+        </p>
+        <figure>
+          <img src="Images/kiro.png" />
+        </figure>
+        <p>
+          키로는 시골이었던 코지마에서 자라면서 더 넓은 세상을 경험하기를
+          원했고, 성인이 될 무렵에 그림과 예술을 공부하기 위해 미국으로
+          떠납니다. 그리고 아버지가 그랬던 것처럼 그곳에서 빈티지 데님을 접하게
+          되며 패션에 대한 열정을 발견하게 됩니다. 마치 운명의 장난처럼.
+        </p>
+      </div>
+
+      <div class="story-chapter10" data-page="10">
+        <hr />
+        <p>
+          미국에서 예술 공부를 마친 키로는 빈티지 데님에 대한 끓어오르는 열정을
+          불태우기 위해 곧장 일본으로 돌아와 당시 흠잡을 곳 하나 없는 기술력을
+          자랑하던 '45RPM'의 디자이너로 일하게 됩니다. 그리고 그곳에서 전통적인
+          기법과 염색 등의 다양한 기술을 배우고, 마침내 2002년에 KAPITAL에
+          합류합니다.
+        </p>
+        <hr />
+        <figure>
+          <img src="Images/45rpm.png" />
+        </figure>
+        <hr />
+        <p>
+          KAPITAL은 토시키요가 코지마에서 쌓아온 데님에 대한 노하우와 키로가
+          45RPM에서 습득한 기술력과 디자인을 모두 가지게 됩니다. 그들은 코지마의
+          장인들을 뛰어넘는 최고 수준의 데님을 보여줄 것이라는 확신이
+          있었습니다.
+        </p>
+        <p>
+          그렇게 키로가 합류한 ‘Capital Ltd‘는 브랜드 네임을 코지마의 ‘K’에
+          수도를 뜻하는 ‘Capital’을 합쳐 ‘KAPITAL’로 바꾸었고 코지마 뿐만 아니라
+          전 세계 데님을 대표하는 브랜드의 시작을 알렸습니다.
+        </p>
+        <hr />
+      </div>
+
+      <div class="story-chapter11" data-page="11">
+        <hr />
+        <span class="heading"
+          >"진정한 아메카지는, <br />
+          복각이 아닌 재해석이다"</span
+        >
+        <hr />
+        <p>
+          일본의 대표적인 데님 브랜드들은 대부분 19세기의 오리지널 데님 브랜드인
+          Levi's와 Lee의 직조, 염색, 바느질 방식을 연구해 그대로 복제하는데
+          초점을 맞추었습니다. <br />이것은 1장에서 소개한 아메카지 즉, 미국의
+          캐주얼 패션에 영향을 받은 결과입니다.
+        </p>
+        <p>
+          그러나, KAPITAL의 키로 히라타는 그들의 아메카지에 대한 접근 방식에
+          대해 다른 시각을 제시합니다.
+        </p>
+        <hr />
+        <p class="reference" id="reference"></p>
+        <hr />
+        <p>
+          그의 말처럼, KAPITAL은 전통을 존중하면서도 새로운 것을 창조해내고
+          있습니다.
+        </p>
+        <p>
+          KAPITAL은 현대적인 패션을 구축하는 방식으로 컬렉션을 전개하며, 복잡한
+          작업을 거치면서 KAPITAL만의 독특한 정체성을 구축하였습니다.
+        </p>
+        <p>
+          이것이 바로 아메카지가 추구하는 옛 것을 브랜드만의 아이덴티티로
+          재해석하는 것입니다. 이제 KAPITAL의 미학의 세계로 함께 들어가
+          보겠습니다.
+        </p>
+      </div>
+
+      <div class="identity-chapter12" data-page="12">
+        <p class="heading">Chapter3.<br />제품으로 보여주는 철학</p>
+      </div>
+
+      <div class="identity-chapter13" data-page="13">
+        <p class="heading">BLUE HANDS</p>
+        <hr />
+        <figure>
+          <img src="Images/dye.png" />
+        </figure>
+        <p>
+          KAPITAL은 에도 시대부터 전해져온 전통적인 인디고 염색 기법인
+          ‘아이조메’를 계승하여 블루 핸즈(Blue Hands)라는 염색 공장을 운영하고
+          있습니다.
+        </p>
+        <p>
+          KAPITAL의 모든 인디고 데님은 블루 핸즈에서 수작업으로 탄생하고 있으며,
+          그들이 인디고 염료를 만지며 푸른색으로 물든 손은 KAPITAL의 로고에서도
+          확인할 수 있습니다.
+        </p>
+        <p>
+          이를 통해 그들이 데님에 대해 쏟아내는 열정의 깊이를 짐작할 수
+          있습니다.
+        </p>
+      </div>
+
+      <div class="identity-chapter14" data-page="14">
+        <figure>
+          <img src="Images/blueHands.png" />
+        </figure>
+        <div class="video-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/Aotsp_iMqBA?autoplay=1&mute=1&controls=0"
+            title="藍を究める In Pursuit of Indigo:  Japanese ikat /Traditional technique (hand weaving, natural indigo dye)"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <figure>
+          <img src="Images/blueHands.png" />
+        </figure>
+      </div>
+
+      <div class="identity-chapter15" data-page="15">
+        <figure>
+          <img src="Images/longLogo.png" />
+        </figure>
+        <div class="video-wrapper">
+          <iframe
+            width="1200"
+            height="675"
+            src="https://www.youtube.com/embed/2TZwPmqUiMg?autoplay=1&mute=1&controls=0"
+            title="Century Denim Event - Kakishibu Demonstration"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <figure>
+          <img class="reverse" src="Images/longLogo.png" />
+        </figure>
+      </div>
+
+      <div class="identity-chapter16" data-page="16">
+        <p class="heading">CENTURY DENIM</p>
+        <hr />
+        <p>
+          KAPITAL의 대표적인 제품으로 ‘Century Denim’이 있습니다. 그들은 이를
+          100년 동안 입을 수 있다고 자부한다는 의미에서 ‘Century Denim’이라 이름
+          붙였습니다. 이 데님은 기본적으로 강도 12oz 원단에 인디고 염색을
+          마치고, 에도 시대에 발명된 일본 전통 핸드 스티치 기법인
+          사시코(Sashiko)를 더해 내구성을 강화하였습니다.
+        </p>
+        <p>
+          Century Denim 중 가장 인기 있는 시리즈인 NO.5는 감 즙 염료를 활용한
+          ‘카키시부(Kakishibu)’라고 불리는 염료를 사용하여 데님을 코팅합니다.
+        </p>
+        <hr />
+        <figure>
+          <img src="Images/century.png" />
+        </figure>
+        <hr />
+      </div>
+
+      <div class="identity-chapter17" data-page="17">
+        <iframe
+          width="423"
+          height="752"
+          src="https://www.youtube.com/embed/WGzkAaLyz6A"
+          title="The Story Behind the Iconic Kapital Boro Jacket"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <div class="identity-chapter18" data-page="18">
+        <p class="heading">BORO</p>
+        <hr />
+        <figure>
+          <img src="Images/boro.png" />
+        </figure>
+        <hr />
+        <p>
+          일본어로 ‘너덜너덜’을 의미하는 보로(Boro)는 기존의 원단 위에 여러 가지
+          천을 사시코 기법을 통해 조각조각 붙이는 방식으로 추위를 견디기 위해
+          처음 발명된 기법입니다.
+        </p>
+        <p>
+          생존을 위해 탄생한 보로 기법은 이제는 KAPITAL의 극한의 기술력을
+          보여주는 예술적 도구입니다.
+        </p>
+      </div>
+
+      <div class="identity-chapter19" data-page="19">
+        <p class="heading">그 외의 다양한 아이템들</p>
+        <hr />
+        <p>
+          이 외에도 해골 문양의 자수를 놓는 본 시리즈, 히피 정신에 기반을 두고
+          모두에게 평화를 바라는 마음으로 만들어낸 스마일 시리즈, 키로가 빈티지
+          데님만큼이나 탐구하는 반다나 시리즈까지. 이 모든 것이 KAPITAL을
+          상징하는 독보적인 아이템입니다.
+        </p>
+        <hr />
+        <figure>
+          <img src="Images/banda1.png" />
+          <img src="Images/banda2.png" />
+        </figure>
+        <hr />
+        <p>
+          이처럼 KAPITAL은 미국에서 유래한 기존의 아이템에 일본 전통 기법을
+          결합하기도, 자수를 넣기도 하는 등의 새로운 작업 과정을 거쳐 아메리칸
+          범주에서 벗어나 우리가 미쳐 보지 못했던 새로운 비전을 제시하고
+          있습니다.
+        </p>
+      </div>
+
+      <div class="identity-chapter20" data-page="20">
+        <figure>
+          <img src="Images/guitar.png" />
+        </figure>
+      </div>
+
+      <div class="identity-chapter21" data-page="21">
+        <p class="heading">이유 있는 여행</p>
+        <hr />
+        <figure>
+          <img src="Images/photo.png" />
+        </figure>
+        <hr />
+        <p class="p1">
+          키로는 매 시즌마다 새로운 것을 선보이기 위해 영감을 찾아 여러 나라를
+          여행하며, KAPITAL이 하나의 문화에 정착하는 것에 그치지 않고, 매
+          시즌마다 다양한 문화와 분위기를 표현 할 수 있게 하기 위하여
+          노력합니다.
+        </p>
+        <p class="p2">
+          문화가 패션에 끼치는 영향으로 탄생한 브랜드인만큼, 그들의 철학은 매우
+          뚜렷합니다.
+        </p>
+        <p class="p3">
+          포토그래퍼 에릭 크바텍(Eric Kvatec)은 키로와 함께 여행을 다니며
+          KAPITAL의 룩북에 그가 원하는 모든 것을 담기 위해 노력합니다. 때문에,
+          KAPITAL은 그들의 옷만큼이나 컬렉션 룩북 또한 매우 유명합니다.
+        </p>
+        <p class="p4">
+          그 중 몇 가지 시즌의 컬렉션을 살펴보며 어떻게 패션으로 문화를 반영하며
+          전통적인 의복을 현대식으로 재해석했는지 알아봅시다.
+        </p>
+      </div>
+
+      <div class="effect-chapter22" data-page="22">
+        <p class="heading">Chapter4.<br />KAPITAL KOUNTRY</p>
+      </div>
+
+      <div class="effect-chapter23" data-page="23">
+        <p class="heading">2017 SS<br />This is Africa</p>
+        <hr />
+        <p>
+          This is Africa’라는 테마로 아프리카의 정서를 담아낸 KAPITAL의 2017 SS
+          컬렉션.
+        </p>
+        <p>
+          이들은 아프리카 전통 디자인에서 영감을 얻어 옷을 디자인하고 아프리카
+          대륙에서 룩북을 완성시켰습니다.
+        </p>
+        <hr />
+        <figure>
+          <img src="Images/africa1.png" />
+        </figure>
+        <hr />
+      </div>
+
+      <div class="effect-chapter24" data-page="24">
+        <hr />
+        <figure class="image-container">
+          <div class="horizontal-images">
+            <img src="Images/africa2.png" />
+            <img src="Images/africa5.png" />
+          </div>
+          <img src="Images/africa4.png" />
+          <div class="horizontal-images">
+            <img src="Images/africa3.png" />
+            <img src="Images/africa6.png" />
+          </div>
+        </figure>
+        <hr />
+      </div>
+
+      <div class="effect-chapter25" data-page="25">
+        <hr />
+        <figure>
+          <img src="Images/kountry2.png" />
+        </figure>
+        <hr />
+      </div>
+
+      <div class="effect-chapter26" data-page="26">
+        <p class="heading">KAPITAL KOUNTRY<br />Hippie Baseball</p>
+        <hr />
+        <p>
+          Kountry 라인은 KAPITAL의 기술들을 활용하여 빈티지 제품을 리메이크하는
+          것을 목적으로 만들어졌으며, 그들의 장인 정신을 토하듯이 쏟아내기 위한
+          라인입니다.
+        </p>
+        <p>
+          Kountry 라인의 가장 최근 룩북인 ‘Hippie Baseball’은 1940년대 야구
+          문화에서 영감을 얻어 제작되었습니다.
+        </p>
+        <hr />
+        <figure>
+          <img src="Images/kountry1.png" />
+        </figure>
+        <hr />
+        <p>
+          룩북 속에는 전형적인 야구 유니폼에 캐피탈의 주요 디자인 상품인 본
+          시리즈를 적용시킨 의류가 주요 아이템으로 등장하고 있으며, 본 시리즈의
+          자수 디테일이 돋보입니다.
+        </p>
+      </div>
+
+      <div class="effect-chapter27" data-page="27">
+        <p class="heading">2016 SS<br />Denim Perth</p>
+        <hr />
+        <figure>
+          <img src="Images/perth1.png" />
+        </figure>
+        <hr />
+        <p>
+          2016년에는 호주의 퍼스에서 대자연에 데님을 녹여내는 컨셉을 기반으로
+          'Denim Perth'라는 컬렉션을 선보였습니다.
+        </p>
+        <p>
+          이들은 피너클스, 화이트샌즈, 프리맨틀의 항구 등 퍼스의 특징을 담고
+          있는 장소에 방문하여 자연과 패션의 화합이라는 신선한 컨셉의 룩북을
+          완성했습니다.
+        </p>
+      </div>
+
+      <div class="effect-chapter28" data-page="28">
+        <figure id="slider">
+          <img src="Images/perth2.png" />
+          <img src="Images/perth3.png" />
+          <img src="Images/perth4.png" />
+          <img src="Images/perth5.png" />
+          <img src="Images/perth6.png" />
+        </figure>
+        <button id="left">
+          <span class="material-symbols-outlined"> arrow_back_ios </span>
+        </button>
+        <button id="right">
+          <span class="material-symbols-outlined"> arrow_forward_ios </span>
+        </button>
+      </div>
+
+      <div class="effect-chapter29" data-page="29">
+        <p class="heading">앞으로 100년, 그 이상을 기대하며</p>
+        <hr />
+        <p>
+          이처럼, KAPITAL은 매 시즌마다 다양한 문화와 장소를 주제로 삼아 옷을
+          만들어내며, 그들만의 독특한 스토리텔링을 선보입니다. 이는 패션이
+          단순히 옷입는 것 이상의 의미를 가지고 있다는 그들의 철학을 반영하는
+          것이며, 이로서 그들은 패션을 통해 문화를 소통하고, 이해하고, 전파하는
+          매개체로 활용하고 있습니다.
+        </p>
+        <p>
+          "문화와 패션의 이해"에서부터 시작한 이 여행은 KAPITAL의 역사와 철학,
+          그리고 그들의 제품과 컬렉션에 대한 탐구로 이어졌습니다. KAPITAL은
+          과거와 현재, 전통과 혁신을 통합하며 아메카지의 본질을 재해석하고
+          있습니다. 우리는 그들의 이야기에서 배운 바를 토대로 패션과 문화의 깊은
+          상호작용을 살펴보았습니다. 그들은 오래된 전통을 지키면서도 현대적이고
+          예술적인 재해석을 시도하는 새로운 패션의 패러다임을 제시하고 있습니다.
+          KAPITAL은 문화와 패션의 결합으로 새로운 비전을 제시하며 끝없는 여정을
+          계속하고 있습니다.
+        </p>
+        <p>
+          KAPITAL은 패션을 통해 우리에게 문화를 바라보는 새로운 시각을
+          제시합니다. 그들의 작품은 우리에게 문화와 패션의 결합이 얼마나
+          풍요로운 창조성을 낳을 수 있는지를 보여줍니다. 이는 우리가 다양성을
+          존중하고 받아들이며, 새로운 문화적 경험과 관점을 탐험하는 데에 열린
+          마음을 가지게 함으로써, 패션을 통해 세계와 연결되어 깊이 이해하고
+          공감할 수 있는 기회를 제공합니다. 따라서 우리는 KAPITAL의 작업을 통해
+          자신의 문화와 다른 문화를 존중하며, 패션을 통한 소통이 우리의 시각을
+          넓혀 새로운 지식과 통찰력을 얻을 수 있는 흥미로운 여정이 될 수 있다는
+          것을 깨닫게 됩니다.
+        </p>
+      </div>
+    </div>
+  </body>
+
+  <footer></footer>
+</html>
